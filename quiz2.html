@@ -10,11 +10,10 @@
 :root{--g1:#0a1f18;--g2:#0d2b22;--g3:#0f3a2d;--g4:#1C4E4D;--g5:#1a6645;--g6:#1e8050;--g7:#22995c;--g8:#27b36a;--g10:#39e87c;--g12:#7df5aa;--g15:#edfbf4;--red:#e24b4a;--redl:#fde8e8;--text:#0d2b22;--text2:#2a5040;--text3:#5a7a6a;--gray1:#f5f9f7;--gray2:#e2ede8;--white:#fff;--r:14px;--rs:8px;--sh:0 2px 16px rgba(10,31,24,0.10)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Cairo',sans-serif;background:var(--gray1);color:var(--text);min-height:100vh;direction:rtl}
-.hdr{background:linear-gradient(135deg,var(--g1) 0%,var(--g3) 45%,var(--g5) 100%);padding:1.75rem 1.5rem 1.25rem;text-align:center;position:relative;overflow:hidden}
+.hdr{background:linear-gradient(135deg,var(--g1) 0%,var(--g3) 45%,var(--g5) 100%);padding:1.5rem 1.5rem 1.1rem;text-align:center;position:relative;overflow:hidden}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--g10),var(--g12),var(--g10),transparent)}
 .hdr-logo{font-size:26px;font-weight:900;background:linear-gradient(90deg,#fff 0%,var(--g12) 60%,var(--g10) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.2rem}
 .hdr-title{color:rgba(255,255,255,.75);font-size:14px;font-weight:600}
-.hdr-sub{color:rgba(255,255,255,.4);font-size:12px;margin-top:.2rem}
 .wrap{max-width:680px;margin:0 auto;padding:1.5rem 1rem}
 .reg{background:var(--white);border-radius:var(--r);padding:1.75rem;border:.5px solid var(--gray2);box-shadow:var(--sh);margin-bottom:1.5rem}
 .reg-title{font-size:16px;font-weight:700;color:var(--g4);margin-bottom:.2rem}
@@ -27,14 +26,26 @@ body{font-family:'Cairo',sans-serif;background:var(--gray1);color:var(--text);mi
 .btn-go{width:100%;padding:12px;border-radius:50px;border:none;background:linear-gradient(90deg,var(--g5),var(--g8));color:white;font-size:15px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;transition:opacity .2s;margin-top:.5rem}
 .btn-go:hover{opacity:.88}
 .quiz{display:none}
+
+/* TIMER */
+.timer-bar{background:var(--white);border-radius:var(--r);padding:.85rem 1.25rem;margin-bottom:1rem;border:.5px solid var(--gray2);box-shadow:var(--sh);display:flex;align-items:center;gap:12px}
+.timer-icon{font-size:18px;flex-shrink:0}
+.timer-track{flex:1;background:var(--gray2);border-radius:4px;height:8px;overflow:hidden}
+.timer-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g8),var(--g10));transition:width 1s linear}
+.timer-fill.warn{background:linear-gradient(90deg,#f0c040,#f59e0b)}
+.timer-fill.danger{background:linear-gradient(90deg,var(--red),#f87171)}
+.timer-num{font-size:14px;font-weight:700;color:var(--g4);min-width:40px;text-align:center;flex-shrink:0}
+.timer-num.warn{color:#854f0b}
+.timer-num.danger{color:var(--red)}
+
 .qhdr{background:var(--white);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;border:.5px solid var(--gray2);box-shadow:var(--sh)}
 .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
 .qagent{font-size:13px;font-weight:600;color:var(--g4)}
 .qcount{font-size:12px;color:var(--text3)}
 .progw{height:5px;background:var(--gray2);border-radius:3px;overflow:hidden}
 .progb{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--g7),var(--g10));transition:width .4s ease}
-.qcard{background:var(--white);border-radius:var(--r);padding:1.25rem 1.4rem;margin-bottom:.9rem;border:.5px solid var(--gray2);box-shadow:var(--sh);transition:border-color .2s}
-.qcard.ok{border-color:var(--g8)}.qcard.bad{border-color:var(--red)}
+.qcard{background:var(--white);border-radius:var(--r);padding:1.25rem 1.4rem;margin-bottom:.9rem;border:.5px solid var(--gray2);box-shadow:var(--sh)}
+.qcard.ok{border-color:var(--g8)}.qcard.bad{border-color:var(--red)}.qcard.skipped{border-color:var(--gray3);opacity:.7}
 .qnum{font-size:11px;font-weight:700;color:var(--g7);letter-spacing:1px;margin-bottom:.45rem}
 .qtext{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.85rem;line-height:1.6}
 .opts{display:flex;flex-direction:column;gap:7px}
@@ -47,16 +58,18 @@ body{font-family:'Cairo',sans-serif;background:var(--gray1);color:var(--text);mi
 .fb.show{display:block}
 .fb.ok{background:#edfbf4;color:var(--g2);border-right:3px solid var(--g8)}
 .fb.bad{background:var(--redl);color:#7a1f1f;border-right:3px solid var(--red)}
+.fb.skipped{background:var(--gray2);color:var(--text3);border-right:3px solid var(--gray3)}
 .res{background:var(--white);border-radius:var(--r);padding:2rem 1.5rem;margin-top:1rem;text-align:center;border:.5px solid var(--gray2);box-shadow:var(--sh);display:none}
 .res.show{display:block}
 .res-score{font-size:52px;font-weight:900;background:linear-gradient(135deg,var(--g4),var(--g8),var(--g10));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
 .res-sub{font-size:13px;color:var(--text3);margin:.25rem 0 .75rem}
 .res-bw{background:var(--gray2);border-radius:4px;height:10px;margin:0 auto .9rem;max-width:280px;overflow:hidden}
 .res-b{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g6),var(--g10));transition:width .8s ease}
-.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.1rem}
+.res-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.1rem}
 .rs{background:var(--gray1);border-radius:var(--rs);padding:.7rem}
-.rs-n{font-size:20px;font-weight:900}.rs-l{font-size:11px;color:var(--text3);margin-top:2px}
+.rs-n{font-size:18px;font-weight:900}.rs-l{font-size:10px;color:var(--text3);margin-top:2px}
 .res-msg{font-size:15px;font-weight:600;color:var(--text);margin-bottom:.5rem}
+.timeout-badge{display:inline-block;background:var(--redl);color:var(--red);font-size:12px;font-weight:700;padding:4px 14px;border-radius:20px;border:.5px solid var(--red);margin-bottom:.75rem}
 .es{font-size:12px;color:var(--text3);margin-bottom:1.25rem;min-height:18px}
 .es.sent{color:var(--g6)}.es.fail{color:var(--red)}
 .btn-retry{padding:10px 28px;border-radius:50px;border:none;background:linear-gradient(90deg,var(--g5),var(--g8));color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;transition:opacity .2s}
@@ -67,29 +80,35 @@ body{font-family:'Cairo',sans-serif;background:var(--gray1);color:var(--text);mi
 <div class="hdr">
   <div class="hdr-logo">8Orders</div>
   <div class="hdr-title">النموذج الثاني — اختبار شامل</div>
-  <div class="hdr-sub">20 سؤال شامل — سجّل اسمك للبدء</div>
 </div>
 <div class="wrap">
   <div class="reg" id="reg">
     <div class="reg-title">بياناتك قبل الاختبار</div>
-    <div class="reg-sub">ادخل اسمك وإيميلك — هيتبعت التقرير أوتوماتيك للتيم ليدر</div>
+    <div class="reg-sub">مدة الاختبار 6 دقائق — هيتبعت التقرير أوتوماتيك للتيم ليدر</div>
     <div class="field"><label>اسمك الكامل</label><input type="text" id="agName" placeholder="مثال: أحمد محمد"/></div>
     <div class="field"><label>إيميلك</label><input type="email" id="agEmail" placeholder="مثال: ahmed@8orders.com"/></div>
-    <button class="btn-go" onclick="go()">ابدأ الاختبار ←</button>
+    <button class="btn-go" onclick="go()">ابدأ الاختبار ← (6 دقائق)</button>
   </div>
   <div class="quiz" id="quiz">
+    <div class="timer-bar">
+      <div class="timer-icon">⏱️</div>
+      <div class="timer-track"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+      <div class="timer-num" id="timerNum">6:00</div>
+    </div>
     <div class="qhdr">
       <div class="qmeta"><div class="qagent" id="agDisp"></div><div class="qcount" id="cnt">0 / 20</div></div>
       <div class="progw"><div class="progb" id="prog" style="width:0%"></div></div>
     </div>
     <div id="qc"></div>
     <div class="res" id="res">
+      <div id="timeoutBadge"></div>
       <div class="res-score" id="rs">0/20</div>
       <div class="res-sub">النموذج الثاني — اختبار شامل</div>
       <div class="res-bw"><div class="res-b" id="rb" style="width:0%"></div></div>
       <div class="res-stats">
         <div class="rs"><div class="rs-n" id="rc" style="color:#27b36a">0</div><div class="rs-l">صح</div></div>
         <div class="rs"><div class="rs-n" id="rw" style="color:#e24b4a">0</div><div class="rs-l">غلط</div></div>
+        <div class="rs"><div class="rs-n" id="rsk" style="color:#5a7a6a">0</div><div class="rs-l">لم يجب</div></div>
         <div class="rs"><div class="rs-n" id="rp">0%</div><div class="rs-l">النسبة</div></div>
       </div>
       <div class="res-msg" id="rm"></div>
@@ -104,7 +123,8 @@ var QS=[{"t": "comp", "q": "في الأوردر الناقص — الخطوة ا
 var TITLE='النموذج الثاني — اختبار شامل';
 var TL='ebtisam.hassan@8orders.com';
 var SHEET='https://script.google.com/macros/s/AKfycbwr4j6FBmIPj9N3dlFKShdxIxZcosHFlbExDQNNr-CbBlTikFPECnTQUqNtzCkiPTaVvg/exec';
-var done=0,cor=0,agName='',agEmail='';
+var TIMER=360;
+var done=0,cor=0,agName='',agEmail='',timerInt=null,secsLeft=TIMER,finished=false;
 
 function go(){
   var n=document.getElementById('agName').value.trim();
@@ -115,11 +135,59 @@ function go(){
   if(!em){document.getElementById('agEmail').classList.add('err');ok=false;}
   else document.getElementById('agEmail').classList.remove('err');
   if(!ok)return;
-  agName=n; agEmail=em;
+  agName=n;agEmail=em;
   document.getElementById('reg').style.display='none';
   document.getElementById('quiz').style.display='block';
   document.getElementById('agDisp').textContent=agName;
   build();
+  startTimer();
+}
+
+function startTimer(){
+  secsLeft=TIMER;
+  timerInt=setInterval(function(){
+    secsLeft--;
+    var mins=Math.floor(secsLeft/60);
+    var secs=secsLeft%60;
+    var pct=(secsLeft/TIMER)*100;
+    var numEl=document.getElementById('timerNum');
+    var fillEl=document.getElementById('timerFill');
+    numEl.textContent=mins+':'+(secs<10?'0':'')+secs;
+    fillEl.style.width=pct+'%';
+    if(secsLeft<=60){
+      numEl.className='timer-num danger';
+      fillEl.className='timer-fill danger';
+    } else if(secsLeft<=120){
+      numEl.className='timer-num warn';
+      fillEl.className='timer-fill warn';
+    }
+    if(secsLeft<=0){
+      clearInterval(timerInt);
+      timeOut();
+    }
+  },1000);
+}
+
+function timeOut(){
+  if(finished)return;
+  finished=true;
+  for(var qi=0;qi<QS.length;qi++){
+    var card=document.getElementById('qc_'+qi);
+    if(card&&!card.dataset.d){
+      card.dataset.d='1';
+      card.dataset.chosen='-1';
+      card.classList.add('skipped');
+      for(var i=0;i<QS[qi].opts.length;i++){
+        var b=document.getElementById('o_'+qi+'_'+i);
+        if(b)b.disabled=true;
+        if(i===QS[qi].ans&&b)b.classList.add('correct');
+      }
+      var fb=document.getElementById('fb_'+qi);
+      if(fb){fb.className='fb show skipped';fb.textContent='انتهى الوقت — الإجابة الصح: '+QS[qi].opts[QS[qi].ans];}
+    }
+  }
+  document.getElementById('timeoutBadge').innerHTML='<div class="timeout-badge">⏰ انتهى الوقت — الأسئلة اللي لم تجب عليها اعتبرت غلط</div>';
+  showRes(true);
 }
 
 function build(){
@@ -136,6 +204,7 @@ function build(){
 }
 
 function ans(qi,oi){
+  if(finished)return;
   var card=document.getElementById('qc_'+qi);
   if(card.dataset.d)return;
   card.dataset.d='1';
@@ -157,28 +226,35 @@ function ans(qi,oi){
   var pct=Math.round((done/20)*100);
   document.getElementById('prog').style.width=pct+'%';
   document.getElementById('cnt').textContent=done+' / 20';
-  if(done===20)showRes();
+  if(done===20){clearInterval(timerInt);finished=true;showRes(false);}
 }
 
-function showRes(){
+function showRes(isTimeout){
+  var totalWrong=0,totalSkip=0;
+  for(var qi=0;qi<QS.length;qi++){
+    var card=document.getElementById('qc_'+qi);
+    if(card&&card.dataset.d){
+      var chosen=parseInt(card.dataset.chosen);
+      if(chosen===-1)totalSkip++;
+      else if(chosen!==QS[qi].ans)totalWrong++;
+    }
+  }
   var pct=Math.round((cor/20)*100);
-  var wr=20-cor;
   document.getElementById('rs').textContent=cor+'/20';
   document.getElementById('rc').textContent=cor;
-  document.getElementById('rw').textContent=wr;
+  document.getElementById('rw').textContent=totalWrong;
+  document.getElementById('rsk').textContent=totalSkip;
   document.getElementById('rp').textContent=pct+'%';
   document.getElementById('rb').style.width=pct+'%';
   var msgs=[[0,49,'محتاج مراجعة أكتر — راجع الـ Training Hub وحاول تاني'],[50,69,'مقبول — بس محتاج تثبت المعلومة أكتر'],[70,84,'كويس جداً — إنت على الطريق الصح'],[85,94,'ممتاز — أداء رائع'],[95,100,'مثالي — إنت بتاع 8Orders الأصيل']];
   var msg=null;
   for(var i=0;i<msgs.length;i++){if(pct>=msgs[i][0]&&pct<=msgs[i][1]){msg=msgs[i];break;}}
   document.getElementById('rm').textContent=msg?msg[2]:'';
-  var rc=document.getElementById('res');
-  rc.classList.add('show');
-  rc.scrollIntoView({behavior:'smooth',block:'start'});
-  sendAll(cor,wr,pct);
+  var rc=document.getElementById('res');rc.classList.add('show');rc.scrollIntoView({behavior:'smooth',block:'start'});
+  sendAll(cor,totalWrong+totalSkip,pct,isTimeout);
 }
 
-function sendAll(cor,wr,pct){
+function sendAll(cor,wr,pct,isTimeout){
   var now=new Date();
   var d=now.toLocaleDateString('ar-EG')+' '+now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
   var wrongAnswers=[];
@@ -188,16 +264,21 @@ function sendAll(cor,wr,pct){
       var chosen=parseInt(card.dataset.chosen);
       var q=QS[qi];
       if(chosen!==q.ans){
-        wrongAnswers.push({question:q.q,agent_answer:q.opts[chosen]||'لم يجب',correct_answer:q.opts[q.ans]});
+        wrongAnswers.push({
+          question:q.q,
+          agent_answer:chosen===-1?'لم يجب (انتهى الوقت)':q.opts[chosen],
+          correct_answer:q.opts[q.ans]
+        });
       }
     }
   }
   try{
-    fetch(SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent_name:agName,agent_email:agEmail,quiz_name:TITLE,score:cor+'/20',correct:cor,wrong:wr,percentage:pct+'%',date:d,wrong_answers:wrongAnswers})});
+    fetch(SHEET,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({agent_name:agName,agent_email:agEmail,quiz_name:TITLE,score:cor+'/20',correct:cor,wrong:wr,percentage:pct+'%',date:d,timed_out:isTimeout?'Yes':'No',wrong_answers:wrongAnswers})});
   }catch(e){}
   emailjs.send('service_wwpzphf','template_kn3bxey',{to_email:TL,to_name:'Team Leader',agent_name:agName,agent_email:agEmail,tl_email:TL,quiz_name:TITLE,score:cor+'/20',correct:cor,wrong:wr,percentage:pct+'%',date:d})
     .then(function(){var e=document.getElementById('es');e.textContent='تم إرسال النتيجة للتيم ليدر بنجاح';e.className='es sent';})
-    .catch(function(err){var e=document.getElementById('es');e.textContent='تعذّر إرسال الإيميل';e.className='es fail';});
+    .catch(function(){var e=document.getElementById('es');e.textContent='تعذّر إرسال الإيميل';e.className='es fail';});
 }
 </script>
 </body>
