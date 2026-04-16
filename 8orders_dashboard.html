@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8Orders — Quiz Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--g1:#0a1f18;--g2:#0d2b22;--g3:#0f3a2d;--g4:#1C4E4D;--g5:#1a6645;--g7:#22995c;--g8:#27b36a;--g10:#39e87c;--g12:#7df5aa;--g15:#edfbf4;--red:#e24b4a;--redl:#fde8e8;--amber:#f0c040;--amberl:#fef3cd;--text:#0d2b22;--text2:#2a5040;--text3:#5a7a6a;--gray1:#f5f9f7;--gray2:#e2ede8;--gray3:#b2c8bc;--white:#fff;--r:14px;--rs:8px;--sh:0 2px 16px rgba(10,31,24,0.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--gray1);color:var(--text);min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--g1),var(--g3) 50%,var(--g2));padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--g10)}
+.hdr-logo{font-size:20px;font-weight:900;color:var(--g10)}
+.hdr-title{font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.btn-ref{padding:6px 16px;border-radius:50px;border:1.5px solid var(--g10);background:transparent;color:var(--g10);font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif}
+.btn-ref:hover{background:var(--g10);color:var(--g2)}
+.last{font-size:11px;color:rgba(255,255,255,0.35)}
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1rem}
+
+/* SETUP CARD */
+.setup-card{background:var(--white);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem;border:.5px solid var(--gray2);box-shadow:var(--sh)}
+.setup-title{font-size:14px;font-weight:700;color:var(--g4);margin-bottom:.4rem}
+.setup-steps{font-size:12px;color:var(--text3);line-height:1.8;margin-bottom:1rem;background:var(--gray1);padding:.75rem 1rem;border-radius:var(--rs);border-right:3px solid var(--g8)}
+.url-row{display:flex;gap:8px;margin-bottom:8px}
+.url-row input{flex:1;padding:9px 14px;border-radius:var(--rs);border:.5px solid var(--gray2);background:var(--gray1);font-family:'Cairo',sans-serif;font-size:12px;color:var(--text);outline:none}
+.url-row input:focus{border-color:var(--g7)}
+.url-row label{font-size:11px;font-weight:700;color:var(--text3);white-space:nowrap;display:flex;align-items:center;min-width:130px}
+.btn-load{padding:9px 20px;border-radius:var(--rs);border:none;background:linear-gradient(90deg,var(--g5),var(--g8));color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;white-space:nowrap;margin-top:4px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+.stat-card{background:var(--white);border-radius:var(--r);padding:1.1rem;border:.5px solid var(--gray2);box-shadow:var(--sh);text-align:center}
+.stat-n{font-size:28px;font-weight:900;margin-bottom:3px}
+.stat-l{font-size:11px;color:var(--text3);font-weight:600}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.25rem}
+.chart-card{background:var(--white);border-radius:var(--r);padding:1.1rem;border:.5px solid var(--gray2);box-shadow:var(--sh)}
+.chart-title{font-size:12px;font-weight:700;color:var(--g4);margin-bottom:.85rem}
+.chart-wrap{position:relative;height:200px}
+
+/* TABLES */
+.table-card{background:var(--white);border-radius:var(--r);padding:1.1rem;border:.5px solid var(--gray2);box-shadow:var(--sh);margin-bottom:1.25rem}
+.table-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem}
+.table-title{font-size:12px;font-weight:700;color:var(--g4)}
+.badge{background:var(--redl);color:var(--red);font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px}
+.badge.green{background:var(--g15);color:var(--g5)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--g4);color:white;padding:8px 12px;text-align:right;font-weight:700;font-size:11px}
+.tbl td{padding:8px 12px;border-bottom:.5px solid var(--gray2);color:var(--text2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--g15)}
+.cnt{display:inline-block;background:var(--redl);color:var(--red);font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;min-width:24px;text-align:center}
+.pass{color:var(--g7);font-weight:700}
+.fail{color:var(--red);font-weight:700}
+.avg-score{color:var(--amber);font-weight:700}
+.filter-row{display:flex;gap:8px;margin-bottom:.85rem;flex-wrap:wrap}
+.filter-row select,.filter-row input{padding:6px 10px;border-radius:var(--rs);border:.5px solid var(--gray2);background:var(--gray1);font-family:'Cairo',sans-serif;font-size:11px;color:var(--text);outline:none}
+.empty{text-align:center;padding:2.5rem;color:var(--text3);font-size:13px}
+.tbl-wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">8Orders</div>
+    <div class="hdr-title">Quiz Results Dashboard</div>
+  </div>
+  <div class="hdr-right">
+    <div class="last" id="lastUp">—</div>
+    <button class="btn-ref" onclick="loadAll()">↻ تحديث</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- SETUP -->
+  <div class="setup-card">
+    <div class="setup-title">كيفية ربط الداشبورد بالـ Google Sheet</div>
+    <div class="setup-steps">
+      1. افتح الـ Google Sheet → File → Share → Publish to web<br>
+      2. من القائمة الأولى اختار Sheet "Results" → من الثانية اختار "Comma-separated values (.csv)" → اضغط Publish → انسخ الرابط<br>
+      3. نفس الكلام لشيت "Wrong Answers" (اختياري)<br>
+      4. حط الرابطين هنا واضغط تحميل
+    </div>
+    <div class="url-row">
+      <label>📊 Results CSV:</label>
+      <input type="text" id="csvRes" placeholder="https://docs.google.com/spreadsheets/d/.../pub?gid=0&single=true&output=csv"/>
+    </div>
+    <div class="url-row">
+      <label>❌ Wrong Answers CSV:</label>
+      <input type="text" id="csvWrong" placeholder="https://docs.google.com/spreadsheets/d/.../pub?gid=...&single=true&output=csv (اختياري)"/>
+    </div>
+    <button class="btn-load" onclick="loadAll()">تحميل البيانات ←</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-n" id="sTotal" style="color:var(--g4)">—</div><div class="stat-l">إجمالي الاختبارات</div></div>
+    <div class="stat-card"><div class="stat-n" id="sAvg" style="color:var(--g7)">—</div><div class="stat-l">متوسط النتيجة</div></div>
+    <div class="stat-card"><div class="stat-n" id="sPass" style="color:var(--g8)">—</div><div class="stat-l">ناجحين ≥70%</div></div>
+    <div class="stat-card"><div class="stat-n" id="sFail" style="color:var(--red)">—</div><div class="stat-l">محتاجين مراجعة</div></div>
+    <div class="stat-card"><div class="stat-n" id="sTimeout" style="color:var(--amber)">—</div><div class="stat-l">انتهى وقتهم</div></div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">توزيع النتائج</div>
+      <div class="chart-wrap"><canvas id="distChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">متوسط النتيجة لكل موظف (أعلى 10)</div>
+      <div class="chart-wrap"><canvas id="agentChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- WRONG ANSWERS -->
+  <div class="table-card">
+    <div class="table-hdr">
+      <div class="table-title">الأسئلة الأكثر خطأً</div>
+      <span class="badge" id="wrongBadge">0</span>
+    </div>
+    <div id="wrongTable"><div class="empty">حمّل البيانات أولاً</div></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="table-card">
+    <div class="table-hdr">
+      <div class="table-title">سجل النتائج</div>
+      <span class="badge green" id="resBadge">0</span>
+    </div>
+    <div class="filter-row">
+      <input type="text" id="fName" placeholder="بحث بالاسم..." oninput="renderResults()" style="flex:1;min-width:120px"/>
+      <select id="fQuiz" onchange="renderResults()"><option value="">كل النماذج</option></select>
+      <select id="fRes" onchange="renderResults()">
+        <option value="">كل النتائج</option>
+        <option value="pass">ناجح ≥70%</option>
+        <option value="fail">راسب</option>
+        <option value="timeout">انتهى الوقت</option>
+      </select>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>الاسم</th><th>الإيميل</th><th>النموذج</th><th>النتيجة</th><th>النسبة</th><th>الوقت</th><th>التاريخ</th></tr></thead>
+        <tbody id="resTbody"><tr><td colspan="8"><div class="empty">حمّل البيانات أولاً</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var allRes=[],allWrong=[];
+var dChart=null,aChart=null;
+
+function loadAll(){
+  var u1=document.getElementById('csvRes').value.trim();
+  var u2=document.getElementById('csvWrong').value.trim();
+  if(!u1){alert('حط رابط Results CSV الأول');return;}
+  document.getElementById('lastUp').textContent='جاري التحميل...';
+  fetch(u1)
+    .then(function(r){return r.text();})
+    .then(function(csv){
+      allRes=parseCSV(csv);
+      if(u2){
+        fetch(u2).then(function(r){return r.text();}).then(function(csv2){
+          allWrong=parseCSV(csv2);
+          render();
+        }).catch(function(){allWrong=[];render();});
+      } else {allWrong=[];render();}
+    })
+    .catch(function(err){alert('خطأ: '+err.message);});
+}
+
+function parseCSV(txt){
+  var lines=txt.trim().split('\n');
+  if(lines.length<2)return[];
+  var headers=lines[0].split(',').map(function(h){return h.trim().replace(/^"|"$/g,'');});
+  return lines.slice(1).map(function(line){
+    var vals=[],cur='',inQ=false;
+    for(var j=0;j<line.length;j++){
+      var c=line[j];
+      if(c==='"'){inQ=!inQ;}
+      else if(c===','&&!inQ){vals.push(cur.trim());cur='';}
+      else cur+=c;
+    }
+    vals.push(cur.trim());
+    var obj={};
+    headers.forEach(function(h,i){obj[h]=(vals[i]||'').replace(/^"|"$/g,'');});
+    return obj;
+  });
+}
+
+function g(r,keys){for(var i=0;i<keys.length;i++){if(r[keys[i]])return r[keys[i]];}return '';}
+function getPct(r){var p=g(r,['Percentage','percentage'])||'0%';return parseInt(String(p).replace('%',''))||0;}
+function getCorrect(r){var v=g(r,['Correct','correct'])||'0';return parseInt(String(v).match(/\d+/)?String(v).match(/\d+/)[0]:'0');}
+
+function render(){
+  document.getElementById('lastUp').textContent='آخر تحديث: '+new Date().toLocaleTimeString('ar-EG');
+  var quizzes=[];
+  allRes.forEach(function(r){var q=g(r,['Quiz','quiz_name']);if(q&&quizzes.indexOf(q)<0)quizzes.push(q);});
+  var sel=document.getElementById('fQuiz');
+  sel.innerHTML='<option value="">كل النماذج</option>';
+  quizzes.forEach(function(q){var o=document.createElement('option');o.value=q;o.textContent=q;sel.appendChild(o);});
+  updateStats();
+  renderCharts();
+  renderWrong();
+  renderResults();
+}
+
+function updateStats(){
+  var total=allRes.length;
+  var pcts=allRes.map(getPct);
+  var avg=pcts.length?Math.round(pcts.reduce(function(a,b){return a+b;},0)/pcts.length):0;
+  var pass=pcts.filter(function(p){return p>=70;}).length;
+  var fail=total-pass;
+  var timeout=allRes.filter(function(r){return g(r,['Timed Out','timed_out'])==='Yes';}).length;
+  document.getElementById('sTotal').textContent=total;
+  document.getElementById('sAvg').textContent=avg+'%';
+  document.getElementById('sPass').textContent=pass;
+  document.getElementById('sFail').textContent=fail;
+  document.getElementById('sTimeout').textContent=timeout;
+  document.getElementById('resBadge').textContent=total+' نتيجة';
+}
+
+function renderCharts(){
+  var b={'0-49':0,'50-69':0,'70-84':0,'85-100':0};
+  allRes.forEach(function(r){var p=getPct(r);if(p<50)b['0-49']++;else if(p<70)b['50-69']++;else if(p<85)b['70-84']++;else b['85-100']++;});
+  if(dChart)dChart.destroy();
+  dChart=new Chart(document.getElementById('distChart'),{
+    type:'doughnut',
+    data:{labels:['محتاج مراجعة 0-49%','مقبول 50-69%','كويس 70-84%','ممتاز 85-100%'],datasets:[{data:[b['0-49'],b['50-69'],b['70-84'],b['85-100']],backgroundColor:['#e24b4a','#f0c040','#27b36a','#39e87c'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}}}}
+  });
+  var agMap={};
+  allRes.forEach(function(r){var n=g(r,['Agent Name','agent_name'])||'Unknown';if(!agMap[n])agMap[n]=[];agMap[n].push(getPct(r));});
+  var agents=Object.keys(agMap).slice(0,10);
+  var avgs=agents.map(function(a){return Math.round(agMap[a].reduce(function(x,y){return x+y;},0)/agMap[a].length);});
+  if(aChart)aChart.destroy();
+  aChart=new Chart(document.getElementById('agentChart'),{
+    type:'bar',
+    data:{labels:agents,datasets:[{data:avgs,backgroundColor:avgs.map(function(v){return v>=70?'#27b36a':v>=50?'#f0c040':'#e24b4a';}),borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{callback:function(v){return v+'%';}}},x:{ticks:{font:{size:9}}}}}
+  });
+}
+
+function renderWrong(){
+  var map={};
+  allWrong.forEach(function(w){
+    var q=g(w,['Question','question']);
+    if(!q)return;
+    if(!map[q])map[q]={count:0,correct:g(w,['Correct Answer','correct_answer'])};
+    map[q].count++;
+  });
+  var sorted=Object.entries(map).sort(function(a,b){return b[1].count-a[1].count;});
+  document.getElementById('wrongBadge').textContent=sorted.length+' سؤال';
+  if(!sorted.length){
+    document.getElementById('wrongTable').innerHTML='<div class="empty">أضف رابط شيت "Wrong Answers" لعرض الأسئلة الأكثر خطأ</div>';
+    return;
+  }
+  var h='<table class="tbl"><thead><tr><th>#</th><th>السؤال</th><th>الإجابة الصح</th><th>عدد الأخطاء</th></tr></thead><tbody>';
+  sorted.slice(0,20).forEach(function(entry,i){
+    var q=entry[0],data=entry[1];
+    var pct=allRes.length?Math.round((data.count/allRes.length)*100):0;
+    h+='<tr><td>'+(i+1)+'</td><td style="max-width:280px;font-size:11px">'+q+'</td><td style="color:var(--g7);font-weight:700;font-size:11px">'+data.correct+'</td><td><span class="cnt">'+data.count+'</span> <span style="color:var(--text3);font-size:10px">('+pct+'%)</span></td></tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById('wrongTable').innerHTML=h;
+}
+
+function renderResults(){
+  var search=document.getElementById('fName').value.toLowerCase();
+  var quiz=document.getElementById('fQuiz').value;
+  var res=document.getElementById('fRes').value;
+  var filtered=allRes.filter(function(r){
+    var name=g(r,['Agent Name','agent_name']).toLowerCase();
+    var q=g(r,['Quiz','quiz_name']);
+    var pct=getPct(r);
+    var timeout=g(r,['Timed Out','timed_out'])==='Yes';
+    if(search&&name.indexOf(search)<0)return false;
+    if(quiz&&q!==quiz)return false;
+    if(res==='pass'&&pct<70)return false;
+    if(res==='fail'&&pct>=70)return false;
+    if(res==='timeout'&&!timeout)return false;
+    return true;
+  });
+  document.getElementById('resBadge').textContent=filtered.length+' نتيجة';
+  if(!filtered.length){document.getElementById('resTbody').innerHTML='<tr><td colspan="8"><div class="empty">لا توجد نتائج</div></td></tr>';return;}
+  var h='';
+  var rev=filtered.slice().reverse();
+  rev.forEach(function(r,i){
+    var pct=getPct(r);
+    var timeout=g(r,['Timed Out','timed_out'])==='Yes';
+    var cls=pct>=70?'pass':pct>=50?'avg-score':'fail';
+    var lbl=pct>=70?'ناجح':pct>=50?'مقبول':'راسب';
+    var ts=timeout?'<span style="color:var(--amber);font-size:10px;font-weight:700"> ⏰</span>':'';
+    h+='<tr><td>'+(i+1)+'</td><td style="font-weight:600">'+g(r,['Agent Name','agent_name'])+'</td><td style="font-size:10px;color:var(--text3)">'+g(r,['Agent Email','agent_email'])+'</td><td style="font-size:10px">'+g(r,['Quiz','quiz_name'])+'</td><td style="font-weight:700">'+g(r,['Score','score'])+'</td><td><span class="'+cls+'">'+pct+'% — '+lbl+'</span>'+ts+'</td><td style="font-size:10px">'+g(r,['Timed Out','timed_out'])+'</td><td style="font-size:10px;color:var(--text3)">'+(g(r,['Timestamp','date'])||'').split('T')[0]+'</td></tr>';
+  });
+  document.getElementById('resTbody').innerHTML=h;
+}
+</script>
+</body>
+</html>
